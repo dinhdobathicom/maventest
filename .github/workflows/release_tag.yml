@@ -18,7 +18,7 @@ jobs:
           tag_prefix: 'v'
           tag_template: 'yyyy.mm.dd.i'
 
-      - name: Create Release
+      - name: CreateRelease
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,7 +26,25 @@ jobs:
           tag_name: ${{ steps.generate_release_tag.outputs.next_release_tag }}
           release_name: ${{ steps.generate_release_tag.outputs.next_release_tag }}
           on: push
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: export output
+        run: |
+          echo ${{ steps.generate_release_tag.outputs.next_release_tag }} >> $GITHUB_OUTPUT
+
+  slackNotification:
+    name: Slack Notification
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      if: ${{ needs.deploy.result == 'success' }}
+      env:
+        SLACK_CHANNEL: release-tags
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: ${{ needs.deploy.outputs }}
+        SLACK_TITLE: Post Title
+        SLACK_USERNAME: rtCamp
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV }}
