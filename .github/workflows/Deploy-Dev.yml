@@ -25,10 +25,12 @@ jobs:
         mvn package
         ls -ll
         scp target/maven-web.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
-    - uses: voxmedia/github-action-slack-notify-build@v1
-      with:
-         channel: deploy-dev
-         status: STARTED
-         color: good
+  slackNotification:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
       env:
-         SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
