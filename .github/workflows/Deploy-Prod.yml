@@ -1,4 +1,4 @@
-name: deployment.preproduction
+name: Deploy Prod
 on:
   workflow_dispatch:
     inputs:
