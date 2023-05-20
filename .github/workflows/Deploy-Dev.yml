@@ -56,8 +56,8 @@ jobs:
         SLACK_CHANNEL: deploy-dev
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: 'Post Content :rocket:'
-        SLACK_TITLE: Post Title
+        SLACK_MESSAGE: "Success - check here http://wildfly.dinhdobathi.info:8080/maven-web/"
+        SLACK_TITLE: Deploy Status
         SLACK_USERNAME: rtCamp
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV }}
       
