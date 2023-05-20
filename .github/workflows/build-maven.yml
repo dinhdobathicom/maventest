@@ -22,3 +22,5 @@ jobs:
         PATH="${M2_HOME}/bin:${PATH}"
         export PATH
         mvn test
+        mvn package
+        ls -ll 
