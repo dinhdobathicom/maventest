@@ -1,0 +1,36 @@
+name: deployment.preproduction
+on:
+  workflow_dispatch:
+    inputs:
+      prod-tag:
+        description: "Backend tag"
+        required: true
+
+
+env:
+  TAG: ${{ github.event.inputs.prod-tag }}
+jobs:
+  deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on:  macrunner
+    steps:
+      - name: Checkout backend source
+        uses: actions/checkout@v3
+        timeout-minutes: 5
+
+      - uses: actions/checkout@v2
+      - name: Build with Maven
+        run: |
+                run_id=${{ github.event.inputs.prod-tag }}
+                echo $run_id
+                export M2_HOME="/Users/thi/Downloads/apache-maven-3.9.2"
+                PATH="${M2_HOME}/bin:${PATH}"
+                export PATH
+                sed -i "" "s|github_run_id|$run_id|" src/main/webapp/index.jsp
+                mvn test
+                mvn package
+                ls -ll
+                cp target/maven-web.war target/maven-web-prod.war
+                scp target/maven-web-prod.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
