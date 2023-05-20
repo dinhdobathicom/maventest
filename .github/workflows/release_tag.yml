@@ -47,4 +47,4 @@ jobs:
         SLACK_MESSAGE: ${{ needs.deploy.outputs }}
         SLACK_TITLE: Post Title
         SLACK_USERNAME: rtCamp
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV }}
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_RELEASE }}
