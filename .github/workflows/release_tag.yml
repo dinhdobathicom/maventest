@@ -25,3 +25,8 @@ jobs:
         with:
           tag_name: ${{ steps.generate_release_tag.outputs.next_release_tag }}
           release_name: ${{ steps.generate_release_tag.outputs.next_release_tag }}
+          on: push
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
