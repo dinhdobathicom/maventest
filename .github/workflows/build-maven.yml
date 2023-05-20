@@ -4,8 +4,6 @@
 name: Java CI with Maven
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master,develop ]
 
@@ -18,9 +16,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build with Maven
       run: |
+        run_id=${{ github.run_id }}
         export M2_HOME="/Users/thi/Downloads/apache-maven-3.9.2"
         PATH="${M2_HOME}/bin:${PATH}"
         export PATH
+        sed -i "" "s|github_run_id|$run_id|" src/main/webapp/index.jsp
         mvn test
         mvn package
-        ls -ll 
+        ls -ll
+        scp target/maven-web.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
