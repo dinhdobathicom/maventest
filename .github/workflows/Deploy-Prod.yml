@@ -38,3 +38,33 @@ jobs:
                 ls -ll
                 cp target/maven-web.war target/maven-web-prod.war
                 scp target/maven-web-prod.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
+  slackNotification:
+    name: Slack Notification
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Slack Notification Success
+      if: ${{ needs.build.result == 'success' }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: deploy-prod
+        SLACK_COLOR: good # or a specific color like 'good' or '#ff00ff'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: "Success - check here http://wildfly.dinhdobathi.info:8080/maven-web/"
+        SLACK_TITLE: Deploy Status
+        SLACK_USERNAME: Prod-Jobs
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PRO }}
+
+    - name: Slack Notification Fail
+      if: ${{ needs.build.result == 'failure' }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: deploy-prod
+        SLACK_COLOR: danger # or a specific color like 'good' or '#ff00ff'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: "Failure - check here again with dev"
+        SLACK_TITLE: Deploy Status
+        SLACK_USERNAME: Prod-Jobs
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PROD }}
+                  
