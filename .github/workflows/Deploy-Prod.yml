@@ -23,6 +23,8 @@ jobs:
         timeout-minutes: 5
 
       - uses: actions/checkout@v2
+        with:
+            ref: ${{ github.event.inputs.prod-tag }}
       - name: Build with Maven
         run: |
                 run_id=${{ github.event.inputs.prod-tag }}
