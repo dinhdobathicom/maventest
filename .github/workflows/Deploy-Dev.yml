@@ -27,7 +27,7 @@ jobs:
         scp target/maven-web.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
     - uses: voxmedia/github-action-slack-notify-build@v1
       with:
-         channel: app-alerts
+         channel: deploy-dev
          status: STARTED
          color: good
       env:
