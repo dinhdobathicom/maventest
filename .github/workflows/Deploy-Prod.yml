@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout backend source
         uses: actions/checkout@v3
+        with:
+            ref: ${{ github.event.inputs.prod-tag }}
         timeout-minutes: 5
 
       - uses: actions/checkout@v2
