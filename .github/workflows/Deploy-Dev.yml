@@ -37,7 +37,7 @@ jobs:
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_CHANNEL: deploy-dev
-        SLACK_COLOR: danger # or a specific color like 'good' or '#ff00ff'
+        SLACK_COLOR: good # or a specific color like 'good' or '#ff00ff'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
         SLACK_MESSAGE: "Success - check here http://wildfly.dinhdobathi.info:8080/maven-web/"
         SLACK_TITLE: Deploy Status
@@ -49,7 +49,7 @@ jobs:
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_CHANNEL: deploy-dev
-        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_COLOR: danger # or a specific color like 'good' or '#ff00ff'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
         SLACK_MESSAGE: "Failure - check here again with dev"
         SLACK_TITLE: Deploy Status
