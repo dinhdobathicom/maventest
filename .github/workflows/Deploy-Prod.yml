@@ -45,7 +45,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Slack Notification Success
-      if: ${{ needs.build.result == 'success' }}
+      if: ${{ needs.deploy.result == 'success' }}
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_CHANNEL: deploy-prod
@@ -57,7 +57,7 @@ jobs:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PRO }}
 
     - name: Slack Notification Fail
-      if: ${{ needs.build.result == 'failure' }}
+      if: ${{ needs.deploy.result == 'failure' }}
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_CHANNEL: deploy-prod
