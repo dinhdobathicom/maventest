@@ -32,19 +32,8 @@ jobs:
         env:
           SLACK_CHANNEL: release-tags
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_ICON: https://printgo.vn/uploads/file-logo/1/x512x512.bdaa5dd84d993fff954c89a40a227ecd.ai.1.png.pagespeed.ic.n4YnkpERwn.png?size=48
           SLACK_MESSAGE: ${{ steps.generate_release_tag.outputs.next_release_tag }}
-          SLACK_TITLE: Post Title
-          SLACK_USERNAME: rtCamp
+          SLACK_TITLE: Release Version
+          SLACK_USERNAME: Release-bot
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_RELEASE }}
-      - name: Notify slack success
-        if: success()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          # Updates existing message from the first step
-          message_id: ${{ steps.generate_release_tag.outputs.next_release_tag }}
-          channel: release-tags
-          status: SUCCESS
-          color: good
