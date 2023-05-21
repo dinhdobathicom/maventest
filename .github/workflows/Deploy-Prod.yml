@@ -54,7 +54,7 @@ jobs:
         SLACK_MESSAGE: "Success - check here http://wildfly.dinhdobathi.info:8080/maven-web/ - release: ${{ github.event.inputs.prod-tag }} "
         SLACK_TITLE: Deploy Status
         SLACK_USERNAME: Prod-Jobs
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PRO }}
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PROD }}
 
     - name: Slack Notification Fail
       if: ${{ needs.deploy.result == 'failure' }}
