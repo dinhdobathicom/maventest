@@ -25,7 +25,7 @@ jobs:
         mvn package
         ls -ll
         scp target/maven-web.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
-        echo "${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+        echo "$run_id" >> $GITHUB_OUTPUT
 
   slackNotification:
     name: Slack Notification
