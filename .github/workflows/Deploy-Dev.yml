@@ -40,8 +40,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: test output
       run: |
-        a="${{ needs.build.outputs.runid }}"
-        echo $a
+        echo ${{ env.runid }}
 
     - name: Slack Notification Success
       if: ${{ needs.build.result == 'success' }}
