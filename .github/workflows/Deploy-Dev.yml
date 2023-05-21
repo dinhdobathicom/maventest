@@ -25,7 +25,7 @@ jobs:
         mvn package
         ls -ll
         scp target/maven-web.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
-        echo "run_id=${{ github.run_id }}" >> $GITHUB_OUTPUT
+        echo "runid=${{ github.run_id }}" >> $GITHUB_OUTPUT
 
   slackNotification:
     name: Slack Notification
@@ -34,7 +34,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: test output
-      run: echo "${{ needs.build.outputs.run_id}}"
+      run: echo ${{ needs.build.outputs.runid }}
 
     - name: Slack Notification Success
       if: ${{ needs.build.result == 'success' }}
