@@ -25,11 +25,13 @@ jobs:
         mvn package
         ls -ll
         scp target/maven-web.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
+        echo "runid=$run_id"
         echo "runid=$run_id" >> "$GITHUB_OUTPUT"
+        echo "action_state=yellow" >> "$GITHUB_ENV"
     - name: test output
       run: |
-        a="${{ steps.BuildwithMaven.outputs.runid }}"
-        echo $a
+        echo "${{ steps.BuildwithMaven.outputs.runid }}"
+        echo "${{ env.action_state }}"
   slackNotification:
     name: Slack Notification
     needs: build
