@@ -27,24 +27,24 @@ jobs:
           release_name: ${{ steps.generate_release_tag.outputs.next_release_tag }}
           on: push
 
-      - name: export output
-        run: |
-          echo "${{ steps.generate_release_tag.outputs.next_release_tag }}" >> $GITHUB_OUTPUT
-
-  slackNotification:
-    name: Slack Notification
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Slack Notification
-      uses: rtCamp/action-slack-notify@v2
-      if: ${{ needs.deploy.result == 'success' }}
-      env:
-        SLACK_CHANNEL: release-tags
-        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: ${{ needs.deploy.outputs }}
-        SLACK_TITLE: Post Title
-        SLACK_USERNAME: rtCamp
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_RELEASE }}
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: release-tags
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: ${{ steps.generate_release_tag.outputs.next_release_tag }}
+          SLACK_TITLE: Post Title
+          SLACK_USERNAME: rtCamp
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_RELEASE }}
+      - name: Notify slack success
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          # Updates existing message from the first step
+          message_id: ${{ steps.generate_release_tag.outputs.next_release_tag }}
+          channel: release-tags
+          status: SUCCESS
+          color: good

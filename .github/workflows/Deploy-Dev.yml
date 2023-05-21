@@ -14,7 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build with Maven
+    - name: BuildwithMaven
+      env: 
+        dev-version: ${{ github.run_id }}
       run: |
         run_id=${{ github.run_id }}
         export M2_HOME="/Users/thi/Downloads/apache-maven-3.9.2"
@@ -25,13 +27,22 @@ jobs:
         mvn package
         ls -ll
         scp target/maven-web.war ubuntu@46.137.192.81:/opt/wildfly/standalone/deployments
-
+        echo "runid=$run_id"
+        echo "runid=$run_id" >> "$GITHUB_ENV"
+        echo "action_state=yellow" >> "$GITHUB_ENV"
+    - name: test output
+      run: |
+        echo "${{ env.runid }}"
+        echo "${{ env.action_state }}"
   slackNotification:
     name: Slack Notification
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: test output
+      run: |
+        echo "runid=${{ github.run_id }}" >> "$GITHUB_ENV"
     - name: Slack Notification Success
       if: ${{ needs.build.result == 'success' }}
       uses: rtCamp/action-slack-notify@v2
@@ -39,7 +50,7 @@ jobs:
         SLACK_CHANNEL: deploy-dev
         SLACK_COLOR: good # or a specific color like 'good' or '#ff00ff'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: "Success - check here http://wildfly.dinhdobathi.info:8080/maven-web/"
+        SLACK_MESSAGE: "Success - check here http://wildfly.dinhdobathi.info:8080/maven-web/ version ${{ env.runid }} "
         SLACK_TITLE: Deploy Status
         SLACK_USERNAME: Dev-Jobs
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV }}
