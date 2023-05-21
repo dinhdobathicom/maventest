@@ -33,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: test output
+      run: echo "${{ needs.build.outputs.run_id}}"
+
     - name: Slack Notification Success
       if: ${{ needs.build.result == 'success' }}
       uses: rtCamp/action-slack-notify@v2
