@@ -10,7 +10,7 @@ on:
 
 jobs:
   pr-lint:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     steps:
       - uses: morrisoncole/pr-lint-action@v1.7.0
         with:
