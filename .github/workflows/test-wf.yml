@@ -1,0 +1,36 @@
+name: List S3 Buckets
+
+on:
+  workflow_dispatch:
+    inputs:
+      aws-region:
+        description: 'AWS Region'
+        required: true
+        default: 'ap-southeast-1'
+        type: string
+
+jobs:
+  list-s3-buckets:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::464865948930:role/GitHubActionsRole
+          aws-region: ${{ github.event.inputs.aws-region }}
+
+      - name: List S3 buckets
+        run: |
+          echo "Listing S3 buckets in region ${{ github.event.inputs.aws-region }}..."
+          aws s3 ls
+          
+          # For more detailed information about each bucket
+          echo "Getting detailed bucket information..."
+          aws s3api list-buckets --query "Buckets[].Name" --output table
